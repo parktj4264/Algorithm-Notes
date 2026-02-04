@@ -57,6 +57,10 @@ import dis
 from array import array
 from typing import Callable, List, Tuple, Any
 
+print("done importing modules.")
+
+
+
 
 #%% [공통] 벤치마크 유틸리티
 def bench(fn: Callable[[], Any], repeat: int = 7, gc_disable: bool = True) -> Tuple[float, float, List[float]]:
@@ -139,6 +143,9 @@ x1 = sum_indexing()
 x2 = sum_iteration()
 x3 = sum_builtin()
 print("correctness:", x1 == x2 == x3)
+
+
+# 최대한 sum, min, max 같은 **내장 함수(Built-in Function)**나, 나중에 배울 NumPy 처럼 C로 짜인 도구들에게 일을 떠넘겨야 해. 내가 직접 for문 짜는 순간, 그건 '느린 길'로 들어서는 거야.
 
 
 #%% ============================================================================
@@ -280,4 +287,35 @@ print(f"timeit min | builtin : {t_builtin:.6f}s")
 
 5) Experiment 4:
    - timeit min(repeat) 결과로 핵심 비교를 고정
+
+
+---
+
+Experiment 0: 파이썬 for문은 인터프리터 오버헤드 때문에 느리다. (닥치고 Built-in 써라)Experiment 1: Loop보다 **Comprehension**이 빠른 이유는 Bytecode(전용 명령어) 덕분이다.Experiment 2: **$O(N^2)$**은 $N$이 조금만 커져도 재앙이다. (이중 루프 금지)Experiment 3: List는 메모리 돼지지만 빠르고, Array는 날씬하지만 Boxing 때문에 느리다. (그래서 NumPy가 짱이다)
+
+
+1. 🐢 인터프리터 오버헤드 (Interpreter Overhead)
+상황: for문 돌 때마다 파이썬이 한 줄씩 통역하는 상황.
+
+비유: "동시 통역 비용"
+
+R(sum)이나 C언어는 한국인끼리 말해서 0.1초면 알아듣는데,
+
+파이썬 for문은 "영어 → 한국어 통역사" 거치느라 한 마디 할 때마다 1초씩 까먹음.
+
+이 '통역사 부르는 비용'이 바로 오버헤드.
+
+해결: Built-in (내장 함수) 쓰면 통역사 없이 그냥 **바디랭귀지(C언어)**로 바로 통함.
+
+2. 📜 바이트코드 (Bytecode) & 컴프리헨션
+상황: list.append() 대신 [x for x in a] 쓰는 게 빠른 이유.
+
+비유: "작업 지시서(SOP)"
+
+Loop: 작업자한테 "야, 매뉴얼 3페이지 펴서... append 찾아서... 실행해." (매번 찾음)
+
+Comprehension: 작업자한테 "야! 묻지 말고 그냥 다 집어넣어!" 라고 전용 코드(LIST_APPEND) 발급.
+
+파이썬 가상머신(PVM)이 읽는 '기계어 직전의 언어'가 바이트코드임.
+
 """
