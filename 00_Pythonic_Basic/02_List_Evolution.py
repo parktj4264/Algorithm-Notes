@@ -141,3 +141,4 @@ dis.dis(comp_filter_map)
 
 print("\n>> 핵심: Loop는 'append'라는 이름을 매번 찾고(LOAD_METHOD),")
 print(">> Comprehension은 'LIST_APPEND'라는 전용 기계어로 바로 꽂아 넣습니다.")
+# %%

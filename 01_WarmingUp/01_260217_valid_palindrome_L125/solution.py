@@ -10,12 +10,13 @@ def isPalindrome(s: str) -> bool:
     # 1. 정규식(re)으로 불순물(특수문자) 제거하고 소문자로 변환 (Data Cleaning)
     # 2. Python의 리스트 슬라이싱을 활용하면 코드가 섹시해진다. (s[::-1] 같은 거)
     # 3. R처럼 for loop 돌리면서 하나씩 비교하면 시간 복잡도 O(N)이라도 코드가 구려.
-
-
-
-
     
-    pass
+    s = s.lower()
+    s = re.sub(r'[^a-z0-9]', '', s)
+
+    rev_s = s[::-1]
+
+    return s == rev_s
 
 if __name__ == "__main__":
     # 예제 테스트 케이스
