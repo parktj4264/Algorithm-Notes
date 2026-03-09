@@ -41,6 +41,51 @@ count = sum(s in jewels_set for s in stones)
 
 ```
 
+
+### 4. 카운터 (collections.Counter)
+- **개념:** 해시 테이블(딕셔너리)을 기반으로 데이터의 등장 빈도를 자동으로 계산해 주는 파이썬 내장 클래스. 통계/R의 `table()` 함수, 판다스의 `value_counts()`와 완벽히 동일하다.
+- **활용 목적:** 배열 내 원소들의 빈도(Frequency)를 단 한 줄로 집계할 때 사용.
+- **시간 복잡도:** 생성 시 **$O(N)$**
+- **핵심 코드 (빈도수 자동 집계):**
+```python
+from collections import Counter
+nums = [1, 1, 1, 2, 2, 3]
+counts = Counter(nums) # Counter({1: 3, 2: 2, 3: 1})
+```
+
+
+
+
+
+### 5. 힙 (Heap / Priority Queue)
+
+* **개념:** 항상 최대값이나 최소값이 맨 위(Root)에 위치하도록 반쯤 정렬된 상태를 유지하는 트리(Tree) 기반 자료구조.
+* **활용 목적:** 데이터 전체를 완벽하게 정렬($O(N \log N)$)할 필요 없이, **'상위 K개 (Top-K)'**나 **'최소/최댓값'**만 빠르게 뽑아낼 때 사용하는 가성비 최강의 자료구조.
+* **시간 복잡도:** 데이터 1개 삽입/삭제 **$O(\log N)$**. 원소 N개 중 상위 K개 추출 시 **$O(N \log K)$**.
+* **핵심 코드 (Top K 추출 치트키):**
+```python
+from collections import Counter
+nums = [1, 1, 1, 2, 2, 3]
+
+# 내부적으로 Heap 알고리즘을 사용하여 O(N log K) 속도로 상위 2개를 묶어냄
+top_2 = Counter(nums).most_common(2) # [(1, 3), (2, 2)]
+```
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 <br>
 <br>
 <br>
