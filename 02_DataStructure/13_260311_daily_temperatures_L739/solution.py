@@ -19,7 +19,8 @@ class Solution:
 
             stack.append(i)
 
-        return answer
+        return answer #푼거같긴한데.. 솔직히 "🛠️ 네가 해야 할 것:" 없었으면 못 풀었음 어렵다너무
+    
 
 if __name__ == "__main__":
     sol = Solution()
