@@ -531,3 +531,93 @@ def bfs(start_r, start_c):
    ((( 주변 1촌들 )))     <-- 거리 1
  (((( 주변 2촌들 ))))     <-- 거리 2 (나중에 큐에 들어감)
 ```
+
+
+
+### 6. 이진 탐색 (Binary Search)
+
+* **개념:** **"정렬된"** 배열에서 탐색 범위를 반씩(1/2) 쪼개 나가며 타겟을 찾는 기법. 통계학에서 누적분포함수(CDF)를 이용해 특정 분위수(Quantile)나 중앙값을 찾을 때 범위를 좁혀가는 과정과 완벽히 동일.
+* **활용 목적:** 무지성 선형 탐색($O(N)$)을 기적의 속도로 찢어버릴 때 사용. 배열 탐색뿐만 아니라 "조건을 만족하는 최적값(Parametric Search)"을 찾을 때도 쓰임.
+* **시간 복잡도:** 매 단계마다 표본 공간이 반갈죽 되므로 **$O(\log N)$**.
+* **💻 파이썬 실전 문법 (bisect 치트키 & 템플릿):**
+
+```python
+import bisect
+# 1. 내장 모듈 사용 (가장 Pythonic!)
+idx = bisect.bisect_left(nums, target)  # target이 들어갈 왼쪽 인덱스 반환 O(log N)
+
+# 2. 정석 while문 템플릿
+left, right = 0, len(nums) - 1
+while left <= right:
+    mid = left + (right - left) // 2  # 오버플로우 방지 및 중앙값 찾기
+    if nums[mid] == target:
+        return mid
+    elif nums[mid] < target:
+        left = mid + 1                # 타겟이 더 크면 오른쪽 절반 탐색
+    else:
+        right = mid - 1               # 타겟이 더 작으면 왼쪽 절반 탐색
+
+```
+
+* **특수문자 시각화 (반갈죽):**
+
+```text
+ [ 1,  3,  5,  7,  9,  11,  13 ]   <-- Target: 11
+           ⬆️ (Mid=7, 11보다 작네? 왼쪽 다 버려!)
+                 [ 9,  11,  13 ]
+                       ⬆️ (Mid=11, 찾았다!)
+
+```
+
+### 7. 동적 계획법 (DP: Dynamic Programming)
+
+* **개념:** "과거의 정답을 기억해 두었다가 재활용한다." 통계학의 점화식(Recurrence Relation)이나 마르코프 체인(Markov Chain)처럼, 현재의 상태가 이전 상태들의 조합으로 이루어질 때 **메모리를 제물로 바쳐 중복 연산을 파괴**하는 최적화 기법.
+* **활용 목적:** 피보나치 수열처럼 재귀 트리에서 동일한 하위 문제(Sub-problem)가 미친 듯이 반복될 때, 결과를 배열(Memoization/Tabulation)에 저장하여 꺼내 씀.
+* **시간 복잡도:** 무지성 재귀 **$O(2^N)$** ➔ DP 적용 시 **$O(N)$**.
+* **💻 파이썬 실전 문법 (Top-down 캐싱 & Bottom-up):**
+
+```python
+# 1. Pythonic 치트키: LRU Cache (재귀 함수 위에 달아주면 알아서 캐싱됨!)
+from functools import lru_cache
+
+@lru_cache(maxsize=None)
+def fibo(n):
+    if n <= 1: return n
+    return fibo(n-1) + fibo(n-2)
+
+# 2. 정석 Bottom-up (1차원 DP 테이블)
+dp = [0] * (n + 1)
+dp[1] = 1
+for i in range(2, n + 1):
+    dp[i] = dp[i-1] + dp[i-2]  # 점화식 그대로 구현
+
+```
+
+* **특수문자 시각화 (메모이제이션의 기적):**
+
+```text
+        [ F(4) ]
+       /        \
+   [ F(3) ]    [ F(2) ]  <-- 우측 F(2)는 계산 안 함! 
+   /      \                  왼쪽에서 F(3) 구할 때 메모장(dp 배열)에
+[ F(2) ] [ F(1) ]            적어둔 값 그냥 O(1)로 꺼내 옴. 
+
+```
+
+### 8. 순열과 조합 (Combinatorics - `itertools`)
+
+* **개념:** 우리가 어제 뼈 빠지게 DFS 백트래킹으로 구현했던 순열($nPr$)과 조합($nCr$)을 C언어 기반의 초고속 내장 라이브러리로 뽑아내는 파이썬의 축복.
+* **활용 목적:** 코테에서 "모든 경우의 수를 다 구하시오" 류의 완전 탐색(Brute-force) 문제가 나왔을 때, 백트래킹을 직접 짜지 않아도 될 때 사용. (단, 문제에서 백트래킹 자체를 묻거나 제약 조건이 복잡하면 직접 짜야 함).
+* **💻 파이썬 실전 문법:**
+
+```python
+from itertools import permutations, combinations
+
+nums = [1, 2, 3]
+# 순열 (순서 O)
+list(permutations(nums, 2))  # [(1, 2), (1, 3), (2, 1), (2, 3), (3, 1), (3, 2)]
+
+# 조합 (순서 X)
+list(combinations(nums, 2))  # [(1, 2), (1, 3), (2, 3)]
+
+```
